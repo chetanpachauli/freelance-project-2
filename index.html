@@ -2363,23 +2363,332 @@ footer small {
     }
   };
 
-  /* Three.js Hero 3D Scene: Blender Studio Lighting + Layered Parallax + Floating 3D Geometries */
   function tex(kind) {
     var c = document.createElement('canvas');
-    c.width = 512; c.height = 340;
+    c.width = 1024; c.height = 680;
     var x = c.getContext('2d');
-    x.fillStyle = '#ffffff'; x.fillRect(0, 0, 512, 340);
-    x.fillStyle = '#0b0e2b'; x.fillRect(0, 0, 512, 36);
-    ['#ff5f56', '#ffbd2e', '#27c93f'].forEach(function(k, i) {
-      x.fillStyle = k; x.beginPath(); x.arc(20 + i * 18, 18, 5, 0, 7); x.fill();
-    });
-    x.fillStyle = ['#4F6BFF', '#7CF2C9', '#FF6B8B'][kind];
-    x.fillRect(24, 58, 300, 110);
-    x.fillStyle = '#E3E7F6';
-    for (var i = 0; i < 4; i++) x.fillRect(24, 188 + i * 28, [280, 220, 260, 180][i], 12);
-    x.fillStyle = '#0b0e2b'; x.fillRect(350, 60, 130, 24);
-    x.fillStyle = '#E3E7F6'; x.fillRect(350, 100, 130, 70); x.fillRect(350, 186, 130, 110);
-    return new THREE.CanvasTexture(c);
+
+    // Rounded rectangle helper
+    function rRect(x0, y0, w, h, r) {
+      x.beginPath();
+      x.moveTo(x0 + r, y0);
+      x.lineTo(x0 + w - r, y0);
+      x.quadraticCurveTo(x0 + w, y0, x0 + w, y0 + r);
+      x.lineTo(x0 + w, y0 + h - r);
+      x.quadraticCurveTo(x0 + w, y0 + h, x0 + w - r, y0 + h);
+      x.lineTo(x0 + r, y0 + h);
+      x.quadraticCurveTo(x0, y0 + h, x0, y0 + h - r);
+      x.lineTo(x0, y0 + r);
+      x.quadraticCurveTo(x0, y0, x0 + r, y0);
+      x.closePath();
+    }
+
+    // Outer Window Shell (Dark Glass with Border)
+    var bgGrad = x.createLinearGradient(0, 0, 1024, 680);
+    if (kind === 0) {
+      bgGrad.addColorStop(0, '#0c1033');
+      bgGrad.addColorStop(1, '#151b4f');
+    } else if (kind === 1) {
+      bgGrad.addColorStop(0, '#100b2b');
+      bgGrad.addColorStop(1, '#221552');
+    } else {
+      bgGrad.addColorStop(0, '#0a1236');
+      bgGrad.addColorStop(1, '#112260');
+    }
+    x.fillStyle = bgGrad;
+    rRect(0, 0, 1024, 680, 24);
+    x.fill();
+    x.strokeStyle = 'rgba(255, 255, 255, 0.16)';
+    x.lineWidth = 3;
+    x.stroke();
+
+    // macOS Window Chrome Bar
+    var barGrad = x.createLinearGradient(0, 0, 1024, 0);
+    barGrad.addColorStop(0, '#080a22');
+    barGrad.addColorStop(1, '#0e123a');
+    x.fillStyle = barGrad;
+    rRect(0, 0, 1024, 56, 24);
+    x.fill();
+    x.fillRect(0, 32, 1024, 24);
+    x.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    x.lineWidth = 1.5;
+    x.beginPath(); x.moveTo(0, 56); x.lineTo(1024, 56); x.stroke();
+
+    // Traffic Lights
+    var dots = ['#ff5f56', '#ffbd2e', '#27c93f'];
+    for (var i = 0; i < 3; i++) {
+      x.fillStyle = dots[i];
+      x.beginPath();
+      x.arc(36 + i * 26, 28, 8, 0, Math.PI * 2);
+      x.fill();
+    }
+
+    // URL Address Capsule
+    x.fillStyle = 'rgba(255, 255, 255, 0.08)';
+    rRect(160, 12, 704, 32, 16);
+    x.fill();
+    x.fillStyle = 'rgba(255, 255, 255, 0.55)';
+    x.font = '600 15px -apple-system, sans-serif';
+    x.textAlign = 'center';
+    var urls = [
+      '🔒 https://marketingtalk.agency/experience-3d',
+      '🔒 https://store.fashionbrand.com/featured',
+      '🔒 https://analytics.fintech.io/dashboard'
+    ];
+    x.fillText(urls[kind], 512, 33);
+    x.textAlign = 'left';
+
+    // CONTENT FOR EACH CARD
+    if (kind === 0) {
+      // CARD 0: SaaS / Creative Agency Landing Page
+      x.fillStyle = 'rgba(124, 242, 201, 0.15)';
+      rRect(48, 86, 220, 32, 16);
+      x.fill();
+      x.strokeStyle = '#7CF2C9';
+      x.lineWidth = 1.5;
+      x.stroke();
+      x.fillStyle = '#7CF2C9';
+      x.font = '700 13px -apple-system, sans-serif';
+      x.fillText('✨ 3D WEB ARCHITECTURE', 64, 107);
+
+      x.fillStyle = '#ffffff';
+      x.font = '800 38px -apple-system, BlinkMacSystemFont, sans-serif';
+      x.fillText('Build Websites That', 48, 168);
+      var textGrad = x.createLinearGradient(48, 0, 480, 0);
+      textGrad.addColorStop(0, '#7CF2C9');
+      textGrad.addColorStop(1, '#4F6BFF');
+      x.fillStyle = textGrad;
+      x.fillText('Convert Visitors.', 48, 214);
+
+      x.fillStyle = 'rgba(255, 255, 255, 0.65)';
+      x.font = '400 16px -apple-system, sans-serif';
+      x.fillText('We craft immersive, lightning-fast digital', 48, 256);
+      x.fillText('experiences that elevate your brand value.', 48, 280);
+
+      var btnGrad = x.createLinearGradient(48, 0, 240, 0);
+      btnGrad.addColorStop(0, '#7CF2C9');
+      btnGrad.addColorStop(1, '#4F6BFF');
+      x.fillStyle = btnGrad;
+      rRect(48, 310, 210, 48, 24);
+      x.fill();
+      x.fillStyle = '#0b0e2b';
+      x.font = '800 16px -apple-system, sans-serif';
+      x.fillText('Start Project →', 95, 340);
+
+      x.fillStyle = 'rgba(255, 255, 255, 0.08)';
+      rRect(274, 310, 160, 48, 24);
+      x.fill();
+      x.fillStyle = '#ffffff';
+      x.font = '600 15px -apple-system, sans-serif';
+      x.fillText('View Work', 315, 340);
+
+      x.fillStyle = 'rgba(255, 255, 255, 0.06)';
+      rRect(520, 86, 456, 272, 18);
+      x.fill();
+      x.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      x.stroke();
+
+      x.fillStyle = '#7CF2C9';
+      x.font = '700 14px -apple-system, sans-serif';
+      x.fillText('CORE WEB VITALS BENCHMARK', 548, 122);
+      x.fillStyle = '#ffffff';
+      x.font = '800 42px -apple-system, sans-serif';
+      x.fillText('99/100', 548, 172);
+      x.fillStyle = 'rgba(255, 255, 255, 0.6)';
+      x.font = '500 14px -apple-system, sans-serif';
+      x.fillText('Ultra-Smooth 60FPS Performance', 548, 200);
+
+      var heights = [60, 95, 80, 130, 110, 160, 140];
+      for (var b = 0; b < heights.length; b++) {
+        var barFill = x.createLinearGradient(0, 320 - heights[b], 0, 320);
+        barFill.addColorStop(0, '#7CF2C9');
+        barFill.addColorStop(1, '#4F6BFF');
+        x.fillStyle = barFill;
+        rRect(548 + b * 56, 320 - heights[b], 34, heights[b], 6);
+        x.fill();
+      }
+
+      for (var f = 0; f < 3; f++) {
+        x.fillStyle = 'rgba(255, 255, 255, 0.05)';
+        rRect(48 + f * 316, 390, 296, 240, 16);
+        x.fill();
+        x.strokeStyle = 'rgba(255, 255, 255, 0.09)';
+        x.stroke();
+
+        var titles = ['Responsive Layouts', 'Conversion Engine', 'Custom Branding'];
+        var icons = ['📱', '⚡', '🎨'];
+        x.font = '28px sans-serif';
+        x.fillText(icons[f], 72, 440);
+        x.fillStyle = '#ffffff';
+        x.font = '700 18px -apple-system, sans-serif';
+        x.fillText(titles[f], 72, 480);
+        x.fillStyle = 'rgba(255, 255, 255, 0.55)';
+        x.font = '400 14px -apple-system, sans-serif';
+        x.fillText('Designed for real users', 72, 510);
+        x.fillText('and measurable business goals.', 72, 532);
+      }
+    } else if (kind === 1) {
+      // CARD 1: Luxury E-Commerce / Creator Store
+      x.fillStyle = 'rgba(255, 138, 31, 0.15)';
+      rRect(48, 86, 210, 32, 16);
+      x.fill();
+      x.strokeStyle = '#FF8A1F';
+      x.lineWidth = 1.5;
+      x.stroke();
+      x.fillStyle = '#FF8A1F';
+      x.font = '700 13px -apple-system, sans-serif';
+      x.fillText('🔥 PREMIUM COLLECTION', 64, 107);
+
+      x.fillStyle = '#ffffff';
+      x.font = '800 36px -apple-system, sans-serif';
+      x.fillText('Minimalist Studio Series', 48, 165);
+
+      x.fillStyle = 'rgba(255, 255, 255, 0.65)';
+      x.font = '400 16px -apple-system, sans-serif';
+      x.fillText('Handcrafted luxury apparel and creative goods.', 48, 200);
+
+      var prodGrad = x.createLinearGradient(48, 230, 480, 580);
+      prodGrad.addColorStop(0, '#2d1854');
+      prodGrad.addColorStop(1, '#4e2384');
+      x.fillStyle = prodGrad;
+      rRect(48, 230, 430, 390, 18);
+      x.fill();
+
+      x.fillStyle = 'rgba(255, 255, 255, 0.08)';
+      rRect(72, 254, 382, 220, 14);
+      x.fill();
+      x.font = '64px sans-serif';
+      x.textAlign = 'center';
+      x.fillText('👟', 263, 380);
+      x.textAlign = 'left';
+
+      x.fillStyle = '#ffffff';
+      x.font = '700 22px -apple-system, sans-serif';
+      x.fillText('Aero Studio Sneakers', 72, 515);
+      x.fillStyle = '#FF8A1F';
+      x.font = '800 24px -apple-system, sans-serif';
+      x.fillText('₹4,999', 72, 555);
+
+      x.fillStyle = '#FF8A1F';
+      rRect(280, 526, 174, 46, 23);
+      x.fill();
+      x.fillStyle = '#ffffff';
+      x.font = '700 15px -apple-system, sans-serif';
+      x.fillText('Order Now →', 320, 555);
+
+      for (var p = 0; p < 2; p++) {
+        x.fillStyle = 'rgba(255, 255, 255, 0.06)';
+        rRect(510, 86 + p * 270, 466, 245, 18);
+        x.fill();
+        x.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        x.stroke();
+
+        var iconsP = ['⌚', '🎒'];
+        var namesP = ['Chronograph Watch v2', 'Nomad Tech Pack'];
+        var pricesP = ['₹8,499', '₹3,799'];
+        x.font = '50px sans-serif';
+        x.fillText(iconsP[p], 540, 180 + p * 270);
+        x.fillStyle = '#ffffff';
+        x.font = '700 20px -apple-system, sans-serif';
+        x.fillText(namesP[p], 640, 160 + p * 270);
+        x.fillStyle = '#7CF2C9';
+        x.font = '800 22px -apple-system, sans-serif';
+        x.fillText(pricesP[p], 640, 195 + p * 270);
+        x.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        x.font = '500 13px -apple-system, sans-serif';
+        x.fillText('★★★★★ (4.9 / 5 Rating)', 640, 225 + p * 270);
+      }
+    } else {
+      // CARD 2: Fintech & Real-Time Growth Analytics Dashboard
+      x.fillStyle = 'rgba(79, 107, 255, 0.15)';
+      rRect(48, 86, 230, 32, 16);
+      x.fill();
+      x.strokeStyle = '#4F6BFF';
+      x.lineWidth = 1.5;
+      x.stroke();
+      x.fillStyle = '#7CF2C9';
+      x.font = '700 13px -apple-system, sans-serif';
+      x.fillText('📈 REAL-TIME METRICS HUB', 64, 107);
+
+      x.fillStyle = '#ffffff';
+      x.font = '800 36px -apple-system, sans-serif';
+      x.fillText('Revenue & Conversion Engine', 48, 165);
+
+      var kpis = [
+        { label: 'TOTAL REVENUE', val: '₹12,48,000', change: '+32.4% ↑', color: '#7CF2C9' },
+        { label: 'CONVERSION RATE', val: '6.84%', change: '+14.2% ↑', color: '#7CF2C9' },
+        { label: 'ACTIVE INQUIRIES', val: '1,420', change: '+88 New', color: '#4F6BFF' }
+      ];
+      for (var k = 0; k < 3; k++) {
+        x.fillStyle = 'rgba(255, 255, 255, 0.05)';
+        rRect(48 + k * 316, 190, 296, 115, 14);
+        x.fill();
+        x.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        x.stroke();
+
+        x.fillStyle = 'rgba(255, 255, 255, 0.55)';
+        x.font = '600 11px -apple-system, sans-serif';
+        x.fillText(kpis[k].label, 68, 220);
+        x.fillStyle = '#ffffff';
+        x.font = '800 24px -apple-system, sans-serif';
+        x.fillText(kpis[k].val, 68, 255);
+        x.fillStyle = kpis[k].color;
+        x.font = '700 13px -apple-system, sans-serif';
+        x.fillText(kpis[k].change, 68, 282);
+      }
+
+      x.fillStyle = 'rgba(255, 255, 255, 0.05)';
+      rRect(48, 325, 928, 295, 18);
+      x.fill();
+      x.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      x.stroke();
+
+      x.fillStyle = '#ffffff';
+      x.font = '700 17px -apple-system, sans-serif';
+      x.fillText('Client Acquisition & Traffic Growth (Annual Velocity)', 74, 362);
+
+      var chartGrad = x.createLinearGradient(0, 380, 0, 580);
+      chartGrad.addColorStop(0, 'rgba(124, 242, 201, 0.35)');
+      chartGrad.addColorStop(1, 'rgba(79, 107, 255, 0.0)');
+
+      var pts = [
+        [74, 540], [180, 500], [290, 520], [400, 460], [510, 480],
+        [620, 420], [730, 440], [840, 390], [940, 410]
+      ];
+      x.beginPath();
+      x.moveTo(pts[0][0], 580);
+      for (var pIdx = 0; pIdx < pts.length; pIdx++) {
+        x.lineTo(pts[pIdx][0], pts[pIdx][1]);
+      }
+      x.lineTo(pts[pts.length - 1][0], 580);
+      x.closePath();
+      x.fillStyle = chartGrad;
+      x.fill();
+
+      x.beginPath();
+      for (var pIdx2 = 0; pIdx2 < pts.length; pIdx2++) {
+        if (pIdx2 === 0) x.moveTo(pts[pIdx2][0], pts[pIdx2][1]);
+        else x.lineTo(pts[pIdx2][0], pts[pIdx2][1]);
+      }
+      x.strokeStyle = '#7CF2C9';
+      x.lineWidth = 3.5;
+      x.stroke();
+
+      for (var dp = 0; dp < pts.length; dp++) {
+        x.fillStyle = '#0b0e2b';
+        x.beginPath();
+        x.arc(pts[dp][0], pts[dp][1], 6, 0, Math.PI * 2);
+        x.fill();
+        x.fillStyle = '#7CF2C9';
+        x.beginPath();
+        x.arc(pts[dp][0], pts[dp][1], 4, 0, Math.PI * 2);
+        x.fill();
+      }
+    }
+
+    var texture = new THREE.CanvasTexture(c);
+    texture.needsUpdate = true;
+    return texture;
   }
 
   var cv = document.getElementById('bg');
