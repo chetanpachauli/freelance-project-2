@@ -2272,9 +2272,20 @@ footer small {
         <span class="err full" id="ec"></span>
 
         <div class="full">
-          <button class="btn btn-p" type="submit" style="background: var(--blue); color: #fff; width: 100%; padding: 15px; font-size: 1rem;">Send My Project Details</button>
+          <button class="btn btn-p" id="subBtn" type="submit" style="background: var(--blue); color: #fff; width: 100%; padding: 15px; font-size: 1rem; border-radius: 99px; font-weight: 700; cursor: pointer;">Send My Project Details</button>
         </div>
-        <div class="ok" id="ok" role="status">Thank you. Your project details have been received.</div>
+        <div class="ok" id="ok" role="status" style="display:none; text-align: center; padding: 24px; background: rgba(124, 242, 201, 0.12); border: 1.5px solid var(--mint); border-radius: 16px; margin-top: 20px;">
+          <h3 style="color: var(--mint); margin-bottom: 8px; font-size: 1.3rem;">🎉 Project Details Dispatched!</h3>
+          <p style="margin-bottom: 16px; color: #ffffff; font-size: 0.95rem;">Your inquiry has been emailed to <strong>marketingtalk58@gmail.com</strong> and prefilled for WhatsApp (+91 6284915237).</p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a id="waDirectBtn" href="#" target="_blank" rel="noopener" class="btn" style="background: #25D366; color: #ffffff; font-weight: 700; padding: 12px 22px; border-radius: 99px;">
+              💬 Open in WhatsApp Chat →
+            </a>
+            <a id="mailDirectBtn" href="#" class="btn btn-g" style="color: #ffffff; padding: 12px 22px; border-radius: 99px;">
+              ✉️ Open in Email App →
+            </a>
+          </div>
+        </div>
       </form>
     </div>
   </section>
@@ -3228,6 +3239,11 @@ footer small {
     ev.preventDefault();
     var n = document.getElementById('n').value.trim();
     var e = document.getElementById('e').value.trim();
+    var brand = document.getElementById('b').value.trim();
+    var url = document.getElementById('u').value.trim();
+    var srv = document.getElementById('t').value;
+    var bud = document.getElementById('bu').value;
+    var det = document.getElementById('d').value.trim();
     var c = document.getElementById('c').checked;
 
     var a = bad('n', 'en', n ? '' : 'Please enter your full name.');
@@ -3236,9 +3252,66 @@ footer small {
 
     if (a || b || !c) return;
 
+    var subBtn = document.getElementById('subBtn');
+    if (subBtn) {
+      subBtn.disabled = true;
+      subBtn.textContent = 'Sending Project Details...';
+    }
+
+    // 1. Dispatch Email to marketingtalk58@gmail.com via FormSubmit AJAX API
+    fetch("https://formsubmit.co/ajax/marketingtalk58@gmail.com", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        Name: n,
+        Email: e,
+        Brand_Name: brand || 'Not specified',
+        Current_Website: url || 'None',
+        Service_Needed: srv,
+        Approximate_Budget: bud,
+        Project_Details: det || 'No extra notes provided',
+        _subject: "🚀 New Website Inquiry from " + n + (brand ? " (" + brand + ")" : "")
+      })
+    }).then(function(res) {
+      console.log('Email successfully dispatched to marketingtalk58@gmail.com');
+    }).catch(function(err) {
+      console.log('Email notice:', err);
+    });
+
+    // 2. Format WhatsApp Message for +91 6284915237
+    var waMsg = "🚀 *New Website Project Inquiry*\n\n" +
+      "👤 *Name:* " + n + "\n" +
+      "📧 *Email:* " + e + "\n" +
+      (brand ? ("🏢 *Brand:* " + brand + "\n") : "") +
+      (url ? ("🌐 *Website:* " + url + "\n") : "") +
+      "🛠️ *Service Needed:* " + srv + "\n" +
+      "💰 *Budget:* " + bud + "\n" +
+      (det ? ("📝 *Details:* " + det + "\n") : "");
+
+    var waUrl = "https://wa.me/916284915237?text=" + encodeURIComponent(waMsg);
+    var mailtoUrl = "mailto:marketingtalk58@gmail.com?subject=" + encodeURIComponent("New Website Inquiry - " + n) + "&body=" + encodeURIComponent(waMsg.replace(/\*/g, ''));
+
+    var waDirectBtn = document.getElementById('waDirectBtn');
+    var mailDirectBtn = document.getElementById('mailDirectBtn');
+    if (waDirectBtn) waDirectBtn.href = waUrl;
+    if (mailDirectBtn) mailDirectBtn.href = mailtoUrl;
+
+    // Show Success Box & Trigger Confetti Burst
     document.getElementById('ok').style.display = 'block';
-    f.reset();
     burst();
+
+    // Automatically open WhatsApp in new tab for direct conversation
+    setTimeout(function() {
+      window.open(waUrl, '_blank');
+      if (subBtn) {
+        subBtn.disabled = false;
+        subBtn.textContent = 'Send My Project Details';
+      }
+      f.reset();
+    }, 600);
   });
 })();
 </script>
