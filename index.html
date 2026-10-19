@@ -412,66 +412,52 @@ nav a:hover { color: var(--mint); }
 .hero .ctas { animation: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both 0.12s; }
 .hero__proof { animation: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both 0.16s; }
 
-/* Native Browser Lazy Layout & Performance Optimization (Super Fast Initial Load) */
-section:not(.hero) {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 650px;
-}
-
-/* Shockwave ring on hero load */
-.shock {
-  position: absolute;
-  left: 65%; top: 45%;
-  width: 80px; height: 80px;
-  margin: -40px;
-  border: 3px solid var(--mint);
-  border-radius: 50%;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Scroll indicator */
-.scr {
-  position: absolute;
-  bottom: 20px; left: 50%;
-  width: 24px; height: 38px;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-radius: 12px;
-  z-index: 2;
-  transform: translateX(-50%);
-}
-.scr::after {
-  content: "";
-  position: absolute;
-  left: 50%; top: 6px;
-  width: 4px; height: 7px;
-  margin-left: -2px;
-  border-radius: 2px;
-  background: var(--mint);
-  animation: sd 1.6s infinite;
-}
-@keyframes sd { to { transform: translateY(14px); opacity: 0; } }
-
 /* 03. Trust / Audience Strip */
 .strip {
-  background: var(--blue);
+  position: relative;
+  z-index: 5;
+  background: linear-gradient(135deg, #3754ea 0%, #4f6bff 50%, #637fff 100%);
   color: #ffffff;
-  padding: 34px 0;
+  padding: 38px 0;
   overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
-.strip h3 { margin: 0 0 14px; font-size: 1.1rem; }
-.tags { display: flex; gap: 10px; flex-wrap: wrap; }
+.strip h3 {
+  margin: 0 0 16px;
+  font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.tags {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 .tags span {
-  border: 1.5px solid rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.08);
-  padding: 8px 18px;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  padding: 9px 20px;
   border-radius: 99px;
   font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.25s ease;
+  font-size: 0.92rem;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  display: inline-block;
+  opacity: 1 !important;
 }
-.tags span:hover { background: #ffffff; color: var(--blue); }
+.tags span:hover,
+.tags span:active,
+.tags span.touch-active,
+.tags span.active-tag {
+  background: #ffffff !important;
+  color: #3754ea !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.45);
+  transform: translateY(-2px);
+}
 
 .mq {
   background: var(--ink);
@@ -528,7 +514,7 @@ section:not(.hero) {
   position: relative;
   overflow: hidden;
 }
-.card:hover {
+.card:hover, .card:active, .card.touch-active, .card.is-in-view {
   transform: translateY(-5px);
   box-shadow: 0 20px 40px -15px var(--blue-glow);
   border-color: var(--blue);
@@ -538,7 +524,10 @@ section:not(.hero) {
   border-left: 4px solid var(--blue);
   border-radius: 14px;
 }
-.prob .card:hover { transform: translateX(6px); }
+.prob .card:hover, .prob .card:active, .prob .card.touch-active, .prob .card.is-in-view {
+  transform: translateX(6px);
+  border-left-color: var(--mint);
+}
 .card h3 { margin: 0 0 6px; font-size: 1.15rem; }
 .card p { color: var(--mute); margin: 0; font-size: 0.94rem; }
 
@@ -581,7 +570,7 @@ section:not(.hero) {
   flex-direction: column;
   position: relative;
 }
-.work-card:hover {
+.work-card:hover, .work-card:active, .work-card.touch-active, .work-card.is-in-view {
   transform: translateY(-6px);
   border-color: var(--blue);
   box-shadow: 0 20px 40px -15px var(--blue-glow);
@@ -600,7 +589,7 @@ section:not(.hero) {
   transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
   display: block;
 }
-.work-card:hover .work-preview img {
+.work-card:hover .work-preview img, .work-card:active .work-preview img, .work-card.touch-active .work-preview img, .work-card.is-in-view .work-preview img {
   transform: scale(1.08);
 }
 .browser-bar {
@@ -651,7 +640,7 @@ section:not(.hero) {
   transition: opacity 0.3s ease;
   z-index: 2;
 }
-.work-card:hover .work-overlay { opacity: 1; }
+.work-card:hover .work-overlay, .work-card:active .work-overlay, .work-card.touch-active .work-overlay, .work-card.is-in-view .work-overlay { opacity: 1; }
 .work-overlay span {
   background: var(--mint);
   color: #0b0e2b;
@@ -715,7 +704,7 @@ section:not(.hero) {
   background: var(--blue);
   transition: width 0.5s ease;
 }
-.why div:hover::before { width: 100%; }
+.why div:hover::before, .why div:active::before, .why div.touch-active::before, .why div.is-in-view::before { width: 100%; }
 .why h3 { font-size: 1.15rem; margin-bottom: 6px; }
 .why p { margin: 0; color: var(--mute); font-size: 0.92rem; }
 
@@ -744,11 +733,17 @@ section:not(.hero) {
   font: 600 1rem 'Bricolage Grotesque';
   transition: all 0.25s ease;
   animation: bob 4s ease-in-out infinite;
+  cursor: pointer;
 }
 .ind span:nth-child(even) { animation-delay: -2s; }
 .ind span:nth-child(3n) { animation-delay: -1s; }
 @keyframes bob { 50% { transform: translateY(-7px); } }
-.ind span:hover { background: var(--blue); color: #ffffff; border-color: var(--blue); }
+.ind span:hover, .ind span:active, .ind span.touch-active, .ind span.is-in-view {
+  background: var(--blue);
+  color: #ffffff;
+  border-color: var(--blue);
+  box-shadow: 0 6px 20px var(--blue-glow);
+}
 
 /* 13. Packages & Pricing */
 .price-grid {
@@ -765,16 +760,23 @@ section:not(.hero) {
   padding: 32px 26px;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease, border-color 0.3s;
+  transition: transform 0.3s ease, border-color 0.3s, box-shadow 0.3s;
 }
-.price-card:hover { transform: translateY(-6px); border-color: var(--blue); }
+.price-card:hover, .price-card:active, .price-card.touch-active, .price-card.is-in-view {
+  transform: translateY(-6px);
+  border-color: var(--blue);
+  box-shadow: 0 20px 40px -15px var(--blue-glow);
+}
 .price-card.feat {
   border: 2px solid var(--mint);
   background: linear-gradient(180deg, var(--card) 0%, rgba(124, 242, 201, 0.05) 100%);
   transform: scale(1.02);
   box-shadow: 0 20px 40px -15px var(--mint-glow);
 }
-.price-card.feat:hover { transform: scale(1.02) translateY(-6px); }
+.price-card.feat:hover, .price-card.feat:active, .price-card.feat.touch-active, .price-card.feat.is-in-view {
+  transform: scale(1.02) translateY(-6px);
+  border-color: var(--mint);
+}
 .price-card h3 { font-size: 1.5rem; margin-bottom: 10px; }
 .price-card p { color: var(--mute); margin-bottom: 22px; font-size: 0.93rem; flex-grow: 1; }
 .price-card .btn { align-self: flex-start; }
@@ -958,6 +960,28 @@ input[aria-invalid="true"] { border-color: #ff5f7e; }
     opacity: 1;
     transform: translateX(0);
   }
+}
+.float-btn:active::before, .float-btn.touch-active::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Touch Ripple on mobile */
+.touch-ripple {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border-radius: 50%;
+  border: 2px solid var(--mint);
+  box-shadow: 0 0 16px var(--mint-glow);
+  pointer-events: none;
+  z-index: 99999;
+  animation: ripPop 0.5s ease-out forwards;
+}
+@keyframes ripPop {
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
 }
 
 .fcta {
@@ -1148,7 +1172,7 @@ footer small {
     <div class="wrap">
       <h3>Websites Built Around Your Business Goals</h3>
       <div class="tags">
-        <span>Small & Growing Businesses</span>
+        <span class="active-tag">Small & Growing Businesses</span>
         <span>Service-Based Businesses</span>
         <span>Personal Brands & Creators</span>
         <span>Professional Services</span>
@@ -2387,19 +2411,91 @@ footer small {
       });
     });
 
-    // Audience tags stagger in
-    gsap.from('.tags span', {
-      opacity: 0,
-      x: -25,
-      stagger: 0.08,
-      scrollTrigger: { trigger: '.strip', start: 'top 90%' }
-    });
+    // Audience tags entrance with safe guarantee (100% visible on all mobile & desktop screens)
+    var audienceTags = document.querySelectorAll('.tags span');
+    if (audienceTags.length) {
+      gsap.fromTo(audienceTags, 
+        { opacity: 0.4, x: -16 },
+        {
+          opacity: 1,
+          x: 0,
+          stagger: 0.06,
+          duration: 0.5,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.strip',
+            start: 'top 95%',
+            once: true
+          }
+        }
+      );
+      // Hard fallback: Ensure full visibility under any circumstances
+      setTimeout(function() {
+        audienceTags.forEach(function(t) {
+          t.style.opacity = '1';
+          t.style.transform = 'none';
+        });
+      }, 500);
+
+      // Interactive Click/Tap to highlight tags
+      audienceTags.forEach(function(tag) {
+        tag.addEventListener('click', function() {
+          audienceTags.forEach(function(t) { t.classList.remove('active-tag'); });
+          tag.classList.add('active-tag');
+        });
+      });
+    }
 
     // Marquee skew on scroll
     gsap.to('.mq div', { skewX: -7, scrollTrigger: { trigger: '.mq', scrub: true } });
 
     // Footer large text scrub
     gsap.fromTo('.big', { x: 100 }, { x: -100, ease: 'none', scrollTrigger: { trigger: 'footer', scrub: true, start: 'top bottom', end: 'bottom bottom' } });
+
+    // Mobile & Touch Tactile Feedback Engine
+    var touchElements = document.querySelectorAll('.card, .work-card, .price-card, .why div, .ind span, .tags span, .float-btn, .btn');
+    touchElements.forEach(function(el) {
+      el.addEventListener('touchstart', function() {
+        el.classList.add('touch-active');
+      }, { passive: true });
+      el.addEventListener('touchend', function() {
+        setTimeout(function() { el.classList.remove('touch-active'); }, 300);
+      }, { passive: true });
+      el.addEventListener('touchcancel', function() {
+        el.classList.remove('touch-active');
+      }, { passive: true });
+    });
+
+    // Mobile Center In-View Spotlight (Gives cards alive, glowing 3D response while scrolling on phone)
+    if ('IntersectionObserver' in window) {
+      var mobileCards = document.querySelectorAll('.card, .work-card, .price-card, .why div');
+      var spotlightObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-in-view');
+          } else {
+            entry.target.classList.remove('is-in-view');
+          }
+        });
+      }, { rootMargin: '-15% 0px -20% 0px', threshold: 0.2 });
+
+      mobileCards.forEach(function(card) {
+        spotlightObserver.observe(card);
+      });
+    }
+
+    // Mobile Touch Ripple (Fingertip glow ring on mobile tap)
+    window.addEventListener('touchstart', function(e) {
+      if (e.touches && e.touches.length > 0) {
+        var touch = e.touches[0];
+        var rip = document.createElement('div');
+        rip.className = 'touch-ripple';
+        rip.style.left = touch.clientX + 'px';
+        rip.style.top = touch.clientY + 'px';
+        document.body.appendChild(rip);
+        setTimeout(function() { if (rip && rip.parentNode) rip.parentNode.removeChild(rip); }, 500);
+      }
+    }, { passive: true });
 
     // Desktop Mouse Hover Tilt & Cursor Interactions
     if (matchMedia('(hover: hover)').matches) {
