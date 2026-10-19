@@ -9,7 +9,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Instrument+Serif:ital@1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
@@ -278,29 +278,214 @@ nav a:hover { color: var(--mint); }
 }
 @keyframes pulse-dot { 50% { transform: scale(1.5); opacity: 0.5; } }
 
-.hero h1 b {
+.hero h1 em.serif-accent {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
   display: inline-block;
-  background: linear-gradient(100deg, #ffffff 30%, var(--mint) 55%, #8fa0ff 100%);
-  background-size: 250% 100%;
+  background: linear-gradient(100deg, #ffffff 15%, var(--mint) 60%, #ff8a1f 100%);
+  background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   animation: sh 6s linear infinite;
+  letter-spacing: -0.01em;
+  padding-right: 0.12em;
 }
-@keyframes sh { to { background-position: -250% 0; } }
+@keyframes sh { to { background-position: -200% 0; } }
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: 40px;
+}
+@media (min-width: 1120px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.44fr);
+  }
+}
 
 .hero p.sub {
-  max-width: 35em;
+  max-width: 38em;
   font-size: clamp(1.02rem, 2.5vw, 1.18rem);
   color: #c9ceff;
   line-height: 1.68;
 }
+
+/* Hairline vertical rules in background (Fluxora signature) */
+.hero__rules {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 25%;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero__rules span {
+  width: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.hero__rules span:nth-child(2) {
+  margin-left: 20px;
+}
+
+/* Fluxora-style Pill CTA with Arrow Tile */
 .ctas {
   display: flex;
   gap: 14px;
+  align-items: center;
   flex-wrap: wrap;
   margin-top: 2em;
 }
+.btn-fluxora {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px 8px 24px;
+  border-radius: 999px;
+  background: linear-gradient(96deg, #4f6bff 0%, #7cf2c9 100%);
+  color: #0b0e2b !important;
+  font-weight: 700;
+  box-shadow: 0 14px 35px rgba(79, 107, 255, 0.35);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-fluxora:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 45px rgba(124, 242, 201, 0.45);
+}
+.btn-dot {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #0b0e2b;
+  color: #7cf2c9;
+  transition: transform 0.3s ease;
+}
+.btn-fluxora:hover .btn-dot {
+  transform: translateX(4px);
+}
+.btn-dot svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Overlapping Avatar Dots (Fluxora signature) */
+.hero__proof {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+.hero__faces {
+  display: flex;
+}
+.hero__faces i {
+  width: 32px;
+  height: 32px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border: 2px solid #0b0e2b;
+  background: linear-gradient(140deg, var(--a), var(--b));
+  display: inline-block;
+}
+.hero__faces i:first-child {
+  margin-left: 0;
+}
+.hero__proof-text {
+  display: grid;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: var(--mute);
+}
+.hero__proof-text strong {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Ghost Analytics Panel (Fluxora signature) on Desktop */
+.hero__ghost {
+  display: none;
+  background: rgba(27, 33, 92, 0.35);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 24px;
+  max-width: 320px;
+  justify-self: end;
+}
+@media (min-width: 1120px) {
+  .hero__ghost { display: block; }
+}
+.ghost-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.ghost-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  height: 55px;
+}
+.ghost-bars span {
+  width: 8px;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(180deg, var(--mint), var(--blue));
+  opacity: 0.85;
+  animation: bar-grow 2s ease-in-out infinite alternate;
+}
+.ghost-bars span:nth-child(2) { animation-delay: 0.2s; }
+.ghost-bars span:nth-child(3) { animation-delay: 0.4s; }
+.ghost-bars span:nth-child(4) { animation-delay: 0.6s; }
+.ghost-bars span:nth-child(5) { animation-delay: 0.8s; }
+@keyframes bar-grow {
+  0% { transform: scaleY(0.6); }
+  100% { transform: scaleY(1); }
+}
+.ghost-kpi {
+  font-size: 0.74rem;
+  line-height: 1.4;
+  color: var(--mute);
+  margin: 0;
+}
+.ghost-kpi strong {
+  display: block;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--mint);
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+.ghost-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px;
+}
+.ghost-copy {
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--mute);
+  margin: 0;
+}
+
+/* Staggered Rise Entrance Animation */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: none; }
+}
+.hero .ey { animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both 0.08s; }
+.hero h1 { animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both 0.16s; }
+.hero p.sub { animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both 0.24s; }
+.hero .ctas { animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both 0.32s; }
+.hero__proof { animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both 0.4s; }
+.hero__ghost { animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both 0.48s; }
 
 /* Shockwave ring on hero load */
 .shock {
@@ -1339,15 +1524,65 @@ footer small {
   <!-- 02. Hero Section with Three.js 3D Floating Mockups & Knot -->
   <section class="hero">
     <canvas id="bg" aria-hidden="true"></canvas>
+    
+    <!-- Background Hairline Rules (Fluxora signature) -->
+    <div class="hero__rules" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+
     <div class="scr" aria-hidden="true"></div>
     <div class="shock" aria-hidden="true"></div>
+    
     <div class="wrap">
-      <p class="ey" data-t="Website Design & Development">Website Design & Development</p>
-      <h1 id="h1">Your Website Should Do More Than <b>Just Look Good.</b></h1>
-      <p class="sub">We design and develop modern, responsive websites that communicate your value, build trust, and make it easier for potential customers to take the next step.</p>
-      <div class="ctas">
-        <a class="btn btn-p" href="#enquiry">Get a Free Website Consultation</a>
-        <a class="btn btn-g" href="#work">Explore Our Work</a>
+      <div class="hero-grid">
+        <div class="hero-main-col">
+          <p class="ey" data-t="Website Design & Development">Website Design & Development</p>
+          <h1 id="h1">Your Website Should Do More Than <em class="serif-accent">Just Look Good.</em></h1>
+          <p class="sub">We design and develop modern, responsive websites that communicate your value, build trust, and make it easier for potential customers to take the next step.</p>
+          
+          <div class="ctas">
+            <!-- Fluxora-style Pill CTA with Arrow Tile -->
+            <a class="btn btn-fluxora" href="#enquiry">
+              Get a Free Website Consultation
+              <span class="btn-dot" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 10h12M11 5l5 5-5 5"/>
+                </svg>
+              </span>
+            </a>
+            <a class="btn btn-g" href="#work">Explore Our Work</a>
+          </div>
+
+          <!-- Overlapping Avatar Proof Stack (Fluxora signature) -->
+          <div class="hero__proof">
+            <div class="hero__faces" aria-hidden="true">
+              <i style="--a: #ff7a3d; --b: #ffb27a;"></i>
+              <i style="--a: #6f4bd8; --b: #a98cff;"></i>
+              <i style="--a: #1f9ea8; --b: #63d6df;"></i>
+              <i style="--a: #d8434b; --b: #ff8a8f;"></i>
+            </div>
+            <span class="hero__proof-text">
+              <strong>650+ Client Engagements</strong>
+              Live 1-on-1 Strategy & Design
+            </span>
+          </div>
+        </div>
+
+        <!-- Ghost Analytics KPI Panel (Fluxora signature) on Desktop Viewports -->
+        <aside class="hero__ghost" aria-hidden="true">
+          <div class="ghost-row">
+            <div class="ghost-bars">
+              <span style="height: 35%;"></span>
+              <span style="height: 55%;"></span>
+              <span style="height: 45%;"></span>
+              <span style="height: 75%;"></span>
+              <span style="height: 95%;"></span>
+            </div>
+            <p class="ghost-kpi"><strong>+42%</strong>Conversion<br />Performance</p>
+          </div>
+          <h3 class="ghost-title">Engineered For Impact</h3>
+          <p class="ghost-copy">We design modern responsive web experiences shaped by real human behavior and proven conversion architecture.</p>
+        </aside>
       </div>
     </div>
   </section>
