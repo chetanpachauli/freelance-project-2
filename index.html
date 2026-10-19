@@ -779,88 +779,118 @@ nav a:hover { color: var(--mint); }
   border-color: var(--line);
 }
 
-/* Layer 1: Blueprint */
-.stage-card-grid {
-  display: grid;
-  gap: 12px;
-}
-.stage-card-grid div {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.92rem;
-}
-.stage-card-grid div i {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: var(--mint);
-  box-shadow: 0 0 10px var(--mint);
-}
-
-/* Layer 2: Sitemap */
-.sitemap-tree {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-.s-node {
-  background: rgba(79, 107, 255, 0.2);
-  border: 1px solid var(--blue);
-  color: #ffffff;
-  padding: 8px 18px;
-  border-radius: 10px;
-  font-size: 0.86rem;
-  font-weight: 700;
-}
-[data-theme="light"] .s-node { color: var(--text); }
-.s-node.root { background: var(--blue); color: #fff; }
-.s-branches {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-  justify-content: space-between;
-}
-.s-branches .s-node { flex: 1; text-align: center; }
-
-/* Layer 3: Design */
-.design-preview-mock {
+/* Universal Stage Card Thumbnail UI */
+.stage-thumb-card {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
-.d-hero-banner {
-  height: 90px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #4F6BFF, #7CF2C9);
+.stage-browser-mock {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(11, 14, 43, 0.95);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   position: relative;
+}
+.stage-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.stage-browser-dots {
+  display: flex;
+  gap: 5px;
+}
+.stage-browser-dots span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.stage-browser-dots .d-red { background: #ff5f56; }
+.stage-browser-dots .d-yel { background: #ffbd2e; }
+.stage-browser-dots .d-grn { background: #27c93f; }
+.stage-browser-url {
+  margin-left: 8px;
+  font-family: monospace;
+  font-size: 0.72rem;
+  color: #a5b4fc;
+}
+
+.stage-img-box {
+  position: relative;
+  height: 165px;
   overflow: hidden;
 }
-.d-hero-banner::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  animation: sw 3s infinite;
-}
-.d-grid-blocks {
-  display: flex;
-  gap: 12px;
-}
-.d-grid-blocks s {
-  flex: 1;
-  height: 50px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
+.stage-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
+  transition: transform 0.4s ease;
 }
-.d-cta-glow {
+.stage-card:hover .stage-img-box img {
+  transform: scale(1.04);
+}
+.stage-img-badge {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  background: rgba(11, 14, 43, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 6px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+.stage-img-badge .badge-tag {
+  color: var(--mint);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.stage-img-badge .badge-tag::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 8px var(--mint);
+}
+
+/* Bottom info chips */
+.stage-chips-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.stage-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.stage-chip i {
+  color: var(--mint);
+  font-style: normal;
+}
+.stage-cta-bar {
   text-align: center;
   background: var(--mint);
   color: #0b0e2b;
@@ -869,66 +899,15 @@ nav a:hover { color: var(--mint); }
   padding: 10px;
   border-radius: 99px;
   box-shadow: 0 4px 16px var(--mint-glow);
+  display: block;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-
-/* Layer 4: Dev & Vitals */
-.code-terminal {
-  background: rgba(11, 14, 43, 0.9);
-  border-radius: 14px;
-  padding: 16px;
-  font-family: monospace;
-  font-size: 0.84rem;
+.stage-cta-bar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--mint-glow);
+  color: #0b0e2b;
 }
-.code-line { margin-bottom: 8px; }
-.code-line .k { color: #ff6b8b; }
-.code-line .f { color: #7cf2c9; }
-.code-line .s { color: #ffd166; }
-.code-line .b { color: #4f6bff; }
-.code-line .c { color: #8fa0ff; }
-.vitals-meter {
-  margin-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 12px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.v-bar {
-  flex: 1;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 99px;
-  overflow: hidden;
-}
-.v-fill {
-  width: 99%;
-  height: 100%;
-  background: var(--mint);
-  box-shadow: 0 0 10px var(--mint);
-}
-.vitals-meter span {
-  font-weight: 700;
-  color: var(--mint);
-  font-size: 0.85rem;
-}
-
-/* Layer 5: Launch */
-.launch-card {
-  text-align: center;
-  padding: 36px 30px;
-}
-.launch-beacon {
-  font-size: 3.2rem;
-  margin-bottom: 12px;
-  display: inline-block;
-  animation: rocket-pulse 2s infinite ease-in-out;
-}
-@keyframes rocket-pulse {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-8px) scale(1.1); }
-}
-.launch-card h4 { font-size: 1.45rem; margin-bottom: 8px; }
-.launch-card p { color: var(--mute); font-size: 0.92rem; margin: 0; }
 
 /* Mobile adaptations for Storytelling */
 @media (max-width: 860px) {
@@ -942,10 +921,17 @@ nav a:hover { color: var(--mint); }
     gap: 32px;
   }
   .story-visual-stage {
-    height: 380px;
+    height: 420px;
   }
   .stage-card {
-    padding: 22px;
+    padding: 20px;
+  }
+  .stage-img-box {
+    height: 135px;
+  }
+  .stage-chips-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
   }
 }
 
@@ -1641,11 +1627,26 @@ footer small {
                 <span>01 // DISCOVERY BRIEF</span>
                 <span>STATUS: MAPPING</span>
               </div>
-              <div class="stage-card-grid">
-                <div><i></i> Target Audience & Buyer Persona</div>
-                <div><i></i> Brand Values & Conversion Goals</div>
-                <div><i></i> Competitor Landscape Analysis</div>
-                <div><i></i> Tech Stack & Deliverable Scope</div>
+              <div class="stage-thumb-card">
+                <div class="stage-browser-mock">
+                  <div class="stage-browser-bar">
+                    <div class="stage-browser-dots">
+                      <span class="d-red"></span><span class="d-yel"></span><span class="d-grn"></span>
+                    </div>
+                    <span class="stage-browser-url">marketingtalk.agency/discovery</span>
+                  </div>
+                  <div class="stage-img-box">
+                    <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=700&q=80" alt="Discovery & Strategy Blueprint" loading="lazy">
+                    <div class="stage-img-badge">
+                      <span class="badge-tag">Persona & Goals</span>
+                      <span>100% Aligned</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage-chips-row">
+                  <div class="stage-chip"><i>🎯</i> Target Audience Mapped</div>
+                  <div class="stage-chip"><i>⚡</i> Conversion Goal Set</div>
+                </div>
               </div>
             </div>
           </div>
@@ -1657,12 +1658,25 @@ footer small {
                 <span>02 // ARCHITECTURE SITEMAP</span>
                 <span>STATUS: APPROVED</span>
               </div>
-              <div class="sitemap-tree">
-                <div class="s-node root">Marketing Talk Homepage</div>
-                <div class="s-branches">
-                  <div class="s-node">Offer & Services</div>
-                  <div class="s-node">Curated Portfolio</div>
-                  <div class="s-node">Lead Engine</div>
+              <div class="stage-thumb-card">
+                <div class="stage-browser-mock">
+                  <div class="stage-browser-bar">
+                    <div class="stage-browser-dots">
+                      <span class="d-red"></span><span class="d-yel"></span><span class="d-grn"></span>
+                    </div>
+                    <span class="stage-browser-url">marketingtalk.agency/sitemap</span>
+                  </div>
+                  <div class="stage-img-box">
+                    <img src="https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=700&q=80" alt="Website Structure & Sitemap" loading="lazy">
+                    <div class="stage-img-badge">
+                      <span class="badge-tag">Wireframes</span>
+                      <span>Sitemap: 5 Funnels</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage-chips-row">
+                  <div class="stage-chip"><i>🗺️</i> User Journey Flow</div>
+                  <div class="stage-chip"><i>📱</i> Responsive Wireframe</div>
                 </div>
               </div>
             </div>
@@ -1675,12 +1689,27 @@ footer small {
                 <span>03 // 3D & UI PROTOTYPE</span>
                 <span>STATUS: IN FEEDBACK</span>
               </div>
-              <div class="design-preview-mock">
-                <div class="d-hero-banner"></div>
-                <div class="d-grid-blocks">
-                  <s></s><s></s><s></s>
+              <div class="stage-thumb-card">
+                <div class="stage-browser-mock">
+                  <div class="stage-browser-bar">
+                    <div class="stage-browser-dots">
+                      <span class="d-red"></span><span class="d-yel"></span><span class="d-grn"></span>
+                    </div>
+                    <span class="stage-browser-url">marketingtalk.agency/prototype-v3</span>
+                  </div>
+                  <div class="stage-img-box">
+                    <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=700&q=80" alt="3D Website UI Design Prototype" loading="lazy">
+                    <div class="stage-img-badge">
+                      <span class="badge-tag">Blender 3D + PBR</span>
+                      <span>Aesthetic: Dark Modern</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="d-cta-glow">Primary Action: Free Consultation</div>
+                <div class="stage-chips-row">
+                  <div class="stage-chip"><i>✨</i> Metallic 3D Lighting</div>
+                  <div class="stage-chip"><i>🎨</i> Custom Brand Kit</div>
+                </div>
+                <a href="#enquiry" class="stage-cta-bar">Discuss Your Custom Design →</a>
               </div>
             </div>
           </div>
@@ -1692,29 +1721,58 @@ footer small {
                 <span>04 // CLEAN ENGINE & VITALS</span>
                 <span>STATUS: 60FPS COMPILED</span>
               </div>
-              <div class="code-terminal">
-                <div class="code-line"><span class="k">const</span> site = <span class="k">new</span> <span class="f">MarketingTalkExperience</span>();</div>
-                <div class="code-line">site.<span class="f">enableThreeJS</span>({ <span class="b">metallic</span>: <span class="s">true</span> });</div>
-                <div class="code-line">site.<span class="f">optimizeVitals</span>({ <span class="b">lcp</span>: <span class="s">'0.6s'</span>, <span class="b">cls</span>: <span class="s">0.0</span> });</div>
-                <div class="code-line"><span class="c">// Core Web Vitals Score: 99/100</span></div>
-              </div>
-              <div class="vitals-meter">
-                <span>Performance</span>
-                <div class="v-bar"><div class="v-fill"></div></div>
-                <span>99%</span>
+              <div class="stage-thumb-card">
+                <div class="stage-browser-mock">
+                  <div class="stage-browser-bar">
+                    <div class="stage-browser-dots">
+                      <span class="d-red"></span><span class="d-yel"></span><span class="d-grn"></span>
+                    </div>
+                    <span class="stage-browser-url">marketingtalk.agency/source-code</span>
+                  </div>
+                  <div class="stage-img-box">
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=700&q=80" alt="Modern Web Engineering & Code" loading="lazy">
+                    <div class="stage-img-badge">
+                      <span class="badge-tag">Core Web Vitals</span>
+                      <span>Score: 99 / 100 ⚡</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage-chips-row">
+                  <div class="stage-chip"><i>⚡</i> 0.6s Instant LCP</div>
+                  <div class="stage-chip"><i>🎯</i> 60fps Zero CLS</div>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- Stage 5: Launch Rocket Beacon -->
           <div class="stage-layer" data-layer="4">
-            <div class="stage-card launch-card">
-              <div class="stage-card-head" style="justify-content: center;">
+            <div class="stage-card">
+              <div class="stage-card-head">
                 <span>05 // PRODUCTION READY</span>
+                <span>STATUS: LIVE BEACON</span>
               </div>
-              <div class="launch-beacon">🚀</div>
-              <h4>Zero-Downtime Launch</h4>
-              <p>Domain connected, SSL active, consultation lead capture ready for real clients.</p>
+              <div class="stage-thumb-card">
+                <div class="stage-browser-mock">
+                  <div class="stage-browser-bar">
+                    <div class="stage-browser-dots">
+                      <span class="d-red"></span><span class="d-yel"></span><span class="d-grn"></span>
+                    </div>
+                    <span class="stage-browser-url">marketingtalk.agency/live</span>
+                  </div>
+                  <div class="stage-img-box">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=700&q=80" alt="Live Production Website" loading="lazy">
+                    <div class="stage-img-badge">
+                      <span class="badge-tag">Zero-Downtime Launch</span>
+                      <span>🔒 SSL Active</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage-chips-row">
+                  <div class="stage-chip"><i>🚀</i> Domain Connected</div>
+                  <div class="stage-chip"><i>🌐</i> Global CDN Active</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
