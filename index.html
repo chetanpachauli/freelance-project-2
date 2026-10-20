@@ -535,21 +535,24 @@ nav a:hover { color: var(--mint); }
   position: relative;
   overflow: hidden;
 }
-.card:hover, .card:active, .card.touch-active, .card.is-in-view {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px -15px var(--blue-glow);
-  border-color: var(--blue);
+.card:hover, .card:active, .card.touch-active, .card.active-card, .card.is-in-view {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 42px -12px var(--blue-glow), 0 0 16px rgba(124, 242, 201, 0.3);
+  border-color: var(--mint) !important;
+}
+.card:hover h3, .card:active h3, .card.touch-active h3, .card.active-card h3, .card.is-in-view h3 {
+  color: var(--mint);
 }
 .prob .card {
   padding: 18px 22px;
   border-left: 4px solid var(--blue);
   border-radius: 14px;
 }
-.prob .card:hover, .prob .card:active, .prob .card.touch-active, .prob .card.is-in-view {
+.prob .card:hover, .prob .card:active, .prob .card.touch-active, .prob .card.active-card, .prob .card.is-in-view {
   transform: translateX(6px);
   border-left-color: var(--mint);
 }
-.card h3 { margin: 0 0 6px; font-size: 1.15rem; }
+.card h3 { margin: 0 0 6px; font-size: 1.15rem; transition: color 0.25s ease; }
 .card p { color: var(--mute); margin: 0; font-size: 0.94rem; }
 
 /* 05. Services We Offer */
@@ -562,6 +565,8 @@ nav a:hover { color: var(--mint); }
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 #services .card a {
   color: var(--blue);
@@ -570,9 +575,17 @@ nav a:hover { color: var(--mint); }
   align-items: center;
   gap: 6px;
   margin-top: 16px;
-  transition: gap 0.2s, color 0.2s;
+  transition: gap 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.25s ease;
 }
-#services .card a:hover { gap: 10px; color: var(--mint); }
+#services .card:hover a,
+#services .card:active a,
+#services .card.touch-active a,
+#services .card.active-card a,
+#services .card.is-in-view a,
+#services .card a:hover {
+  gap: 12px;
+  color: var(--mint) !important;
+}
 
 /* 06. Portfolio / Selected Work */
 .work-grid {
@@ -2495,13 +2508,6 @@ footer small {
       });
     }
 
-    // Tap/Click on cards decodes and scrambles their heading (Great for mobile!)
-    document.querySelectorAll('.card, .work-card, .price-card').forEach(function(c) {
-      c.addEventListener('click', function() {
-        var h = c.querySelector('h3, h4');
-        if (h) scr(h);
-      });
-    });
 
     // Audience tags entrance with safe guarantee (100% visible on all mobile & desktop screens)
     var audienceTags = document.querySelectorAll('.tags span');
@@ -2565,11 +2571,16 @@ footer small {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-in-view');
+            var h = entry.target.querySelector('h3, h4');
+            if (h && !entry.target._scrambledOnce) {
+              entry.target._scrambledOnce = true;
+              scr(h);
+            }
           } else {
             entry.target.classList.remove('is-in-view');
           }
         });
-      }, { rootMargin: '-15% 0px -20% 0px', threshold: 0.2 });
+      }, { rootMargin: '-8% 0px -12% 0px', threshold: 0.08 });
 
       mobileCards.forEach(function(card) {
         spotlightObserver.observe(card);
@@ -2589,26 +2600,70 @@ footer small {
       }
     }, { passive: true });
 
-    // Desktop Mouse Hover Tilt & Cursor Interactions
-    if (matchMedia('(hover: hover)').matches) {
-      // 3D Card tilt on hover
-      document.querySelectorAll('.card, .work-card').forEach(function(c) {
-        c.addEventListener('pointermove', function(e) {
-          var b = c.getBoundingClientRect(),
-              x = (e.clientX - b.left) / b.width - 0.5,
-              y = (e.clientY - b.top) / b.height - 0.5;
-          gsap.to(c, { rotationY: x * 12, rotationX: -y * 12, transformPerspective: 700, duration: 0.4 });
-        });
-        c.addEventListener('pointerleave', function() {
-          gsap.to(c, { rotationX: 0, rotationY: 0, duration: 0.6 });
-        });
-        c.addEventListener('pointerenter', function() {
-          var h = c.querySelector('h3, h4');
-          if (h) scr(h);
-        });
+    // 3D Card Tilt & Interactive Engine (Mobile Touch-Drag + Desktop Mouse-Hover)
+    var allCards = document.querySelectorAll('.card, .work-card, .price-card');
+    
+    function applyCardTilt(c, clientX, clientY) {
+      var b = c.getBoundingClientRect();
+      var x = (clientX - b.left) / b.width - 0.5;
+      var y = (clientY - b.top) / b.height - 0.5;
+      gsap.to(c, {
+        rotationY: x * 14,
+        rotationX: -y * 14,
+        transformPerspective: 700,
+        duration: 0.25,
+        ease: 'power1.out'
+      });
+    }
+
+    function resetCardTilt(c) {
+      gsap.to(c, { rotationX: 0, rotationY: 0, duration: 0.5, ease: 'power2.out' });
+    }
+
+    allCards.forEach(function(c) {
+      // Desktop Mouse Hover Tilt
+      c.addEventListener('pointermove', function(e) {
+        if (e.pointerType === 'mouse') {
+          applyCardTilt(c, e.clientX, e.clientY);
+        }
+      });
+      c.addEventListener('pointerleave', function() {
+        resetCardTilt(c);
+      });
+      c.addEventListener('pointerenter', function() {
+        var h = c.querySelector('h3, h4');
+        if (h) scr(h);
       });
 
-      // Magnetic Buttons
+      // Mobile Touch Move Tilt (When finger drags across card on phone)
+      c.addEventListener('touchmove', function(e) {
+        if (e.touches && e.touches.length > 0) {
+          applyCardTilt(c, e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: true });
+
+      c.addEventListener('touchend', function() {
+        resetCardTilt(c);
+      });
+
+      // Tap / Click Interaction for BOTH Mobile & Desktop:
+      // Toggles active state, triggers cipher scramble, and does a punchy 3D bounce!
+      c.addEventListener('click', function() {
+        var wasActive = c.classList.contains('active-card');
+        allCards.forEach(function(other) {
+          other.classList.remove('active-card');
+        });
+        if (!wasActive) {
+          c.classList.add('active-card');
+        }
+        var h = c.querySelector('h3, h4');
+        if (h) scr(h);
+        gsap.fromTo(c, { scale: 0.97 }, { scale: 1, duration: 0.35, ease: 'back.out(2.2)' });
+      });
+    });
+
+    // Desktop Magnetic Buttons & Cursor Follower
+    if (matchMedia('(hover: hover)').matches) {
       document.querySelectorAll('.btn').forEach(function(b) {
         b.addEventListener('pointermove', function(e) {
           var r = b.getBoundingClientRect();
