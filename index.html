@@ -242,12 +242,20 @@ nav a:hover { color: var(--mint); }
 .hero {
   background: var(--ink);
   color: #ffffff;
-  min-height: 92vh;
+  min-height: 90vh;
   display: flex;
   align-items: center;
   overflow: hidden;
   padding: 115px 0 70px;
   position: relative;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 25% 45%, rgba(11, 14, 43, 0.45) 0%, rgba(11, 14, 43, 0.85) 65%, #0b0e2b 100%);
+  z-index: 1;
+  pointer-events: none;
 }
 #bg {
   position: absolute;
@@ -255,6 +263,7 @@ nav a:hover { color: var(--mint); }
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: 0;
 }
 .hero .wrap { z-index: 2; }
 .hero .ey {
@@ -267,6 +276,7 @@ nav a:hover { color: var(--mint); }
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 .hero .ey::before {
   content: '';
@@ -278,12 +288,19 @@ nav a:hover { color: var(--mint); }
 }
 @keyframes pulse-dot { 50% { transform: scale(1.5); opacity: 0.5; } }
 
+.hero h1 {
+  color: #ffffff;
+  font-weight: 800;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.85);
+  line-height: 1.12;
+}
+
 .hero h1 em.serif-accent {
   font-family: 'Instrument Serif', Georgia, serif;
   font-style: italic;
   font-weight: 400;
   display: inline-block;
-  background: linear-gradient(100deg, #ffffff 15%, var(--mint) 60%, #ff8a1f 100%);
+  background: linear-gradient(100deg, #ffffff 15%, var(--mint) 60%, #ff9533 100%);
   background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -291,20 +308,24 @@ nav a:hover { color: var(--mint); }
   animation: sh 6s linear infinite;
   letter-spacing: -0.01em;
   padding-right: 0.12em;
+  filter: drop-shadow(0 2px 12px rgba(124, 242, 201, 0.45));
 }
 @keyframes sh { to { background-position: -200% 0; } }
 
 .hero-content {
-  max-width: 780px;
+  max-width: 760px;
   position: relative;
   z-index: 2;
 }
 
 .hero p.sub {
   max-width: 38em;
-  font-size: clamp(1.02rem, 2.5vw, 1.18rem);
-  color: #c9ceff;
-  line-height: 1.68;
+  font-size: clamp(1.04rem, 2.5vw, 1.2rem);
+  color: #e2e8f0;
+  font-weight: 450;
+  line-height: 1.72;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.95);
+  margin: 1.2em 0 2em;
 }
 
 /* Hairline vertical rules in background (Fluxora signature) */
@@ -1045,6 +1066,25 @@ footer small {
 
 /* Mobile Optimizations */
 @media (max-width: 860px) {
+  .hero {
+    padding: 100px 0 55px;
+    min-height: auto;
+  }
+  .hero::before {
+    background: linear-gradient(180deg, rgba(11, 14, 43, 0.65) 0%, rgba(11, 14, 43, 0.9) 45%, #0b0e2b 100%);
+  }
+  #bg {
+    opacity: 0.42;
+  }
+  .hero h1 {
+    font-size: clamp(2.1rem, 7.5vw, 2.9rem);
+    text-shadow: 0 4px 22px rgba(0, 0, 0, 0.95);
+  }
+  .hero p.sub {
+    font-size: 1.02rem;
+    color: #f1f5f9;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95);
+  }
   .prob { grid-template-columns: 1fr; gap: 26px; }
   .nav-t { display: block; }
   nav {
@@ -2047,17 +2087,17 @@ footer small {
     var S = new THREE.Scene(), C = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
     C.position.z = 9.5;
 
-    // Blender-Grade Dynamic Studio Lighting
-    var ambLight = new THREE.AmbientLight(0xffffff, 0.65);
+    // Balanced Studio Lighting (Clean contrast, zero blinding glare)
+    var ambLight = new THREE.AmbientLight(0xffffff, 0.85);
     S.add(ambLight);
 
-    var dirLight = new THREE.DirectionalLight(0xffffff, 0.7);
+    var dirLight = new THREE.DirectionalLight(0xffffff, 0.55);
     dirLight.position.set(5, 12, 8);
     S.add(dirLight);
 
-    var cyanLight = new THREE.PointLight(0x7CF2C9, 2.8, 35);
-    var blueLight = new THREE.PointLight(0x4F6BFF, 3.4, 35);
-    var pinkLight = new THREE.PointLight(0xFF4081, 2.2, 28);
+    var cyanLight = new THREE.PointLight(0x7CF2C9, 1.4, 30);
+    var blueLight = new THREE.PointLight(0x4F6BFF, 1.8, 30);
+    var pinkLight = new THREE.PointLight(0xFF4081, 1.1, 24);
     S.add(cyanLight);
     S.add(blueLight);
     S.add(pinkLight);
@@ -2070,22 +2110,22 @@ footer small {
     [[0, 0, 0, 0], [-2.7, -1.3, -1.5, 1], [2.8, 1.5, -2.0, 2]].forEach(function(d) {
       var m = new THREE.Mesh(
         new THREE.PlaneGeometry(3.9, 2.6),
-        new THREE.MeshStandardMaterial({ map: tex(d[3]), roughness: 0.25, metalness: 0.4, side: THREE.DoubleSide })
+        new THREE.MeshStandardMaterial({ map: tex(d[3]), roughness: 0.35, metalness: 0.35, side: THREE.DoubleSide })
       );
       m.position.set(d[0], d[1], d[2]);
       m.rotation.y = -0.32 + d[3] * 0.22;
       G.add(m);
       P.push({ mesh: m, base: [d[0], d[1], d[2]], speed: 0.8 + d[3] * 0.3 });
 
-      var edges = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry), new THREE.LineBasicMaterial({ color: 0x7CF2C9, linewidth: 2 }));
+      var edges = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry), new THREE.LineBasicMaterial({ color: 0x7CF2C9, linewidth: 2, transparent: true, opacity: 0.6 }));
       m.add(edges);
     });
 
     // Layer 2: Blender-Style Glossy Metallic Torus Knot
     var knotMat = new THREE.MeshStandardMaterial({
       color: 0x3d4fd9,
-      roughness: 0.2,
-      metalness: 0.85,
+      roughness: 0.42,
+      metalness: 0.7,
       wireframe: false
     });
     var tk = new THREE.Mesh(new THREE.TorusKnotGeometry(2.3, 0.42, 180, 24), knotMat);
@@ -2093,16 +2133,16 @@ footer small {
     G.add(tk);
 
     // Outer Neon Wireframe Cage around Torus Knot
-    var cageMat = new THREE.MeshBasicMaterial({ color: 0x7CF2C9, wireframe: true, transparent: true, opacity: 0.35 });
+    var cageMat = new THREE.MeshBasicMaterial({ color: 0x7CF2C9, wireframe: true, transparent: true, opacity: 0.22 });
     var tkCage = new THREE.Mesh(new THREE.TorusKnotGeometry(2.42, 0.48, 90, 14), cageMat);
     tkCage.position.set(0.5, 0, -3.8);
     G.add(tkCage);
 
     // Layer 3: Floating "Chalte-Firte" Blender Polyhedrons & Chrome Spheres
     var floatObjs = [];
-    var matChrome = new THREE.MeshStandardMaterial({ color: 0x8ea2ff, roughness: 0.15, metalness: 0.9 });
-    var matMint = new THREE.MeshStandardMaterial({ color: 0x7cf2c9, roughness: 0.25, metalness: 0.75 });
-    var matGlass = new THREE.MeshPhysicalMaterial ? new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.7, opacity: 0.8, transparent: true, roughness: 0.1 }) : matChrome;
+    var matChrome = new THREE.MeshStandardMaterial({ color: 0x8ea2ff, roughness: 0.35, metalness: 0.8 });
+    var matMint = new THREE.MeshStandardMaterial({ color: 0x7cf2c9, roughness: 0.35, metalness: 0.65 });
+    var matGlass = new THREE.MeshPhysicalMaterial ? new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.6, opacity: 0.7, transparent: true, roughness: 0.2 }) : matChrome;
 
     var geoms = [
       new THREE.IcosahedronGeometry(0.5, 0),
@@ -2129,7 +2169,7 @@ footer small {
     var N = 450, pg = new THREE.BufferGeometry(), pa = new Float32Array(N * 3);
     for (var i = 0; i < N * 3; i++) pa[i] = (Math.random() - 0.5) * 30;
     pg.setAttribute('position', new THREE.BufferAttribute(pa, 3));
-    var pts = new THREE.Points(pg, new THREE.PointsMaterial({ color: 0x9fb0ff, size: 0.075, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending }));
+    var pts = new THREE.Points(pg, new THREE.PointsMaterial({ color: 0x9fb0ff, size: 0.075, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending }));
     S.add(pts);
 
     function rs() {
@@ -2138,8 +2178,14 @@ footer small {
       C.aspect = w / h;
       C.updateProjectionMatrix();
       var wide = w > 860;
-      G.position.set(wide ? 2.8 : 0, wide ? 0 : -2.0, 0);
-      G.scale.setScalar(wide ? 1 : 0.72);
+      if (wide) {
+        G.position.set(3.4, 0.1, 0);
+        G.scale.setScalar(0.95);
+      } else {
+        // On mobile: position 3D visuals below and deep in background so text is 100% unobstructed
+        G.position.set(0, -4.5, -3.5);
+        G.scale.setScalar(0.48);
+      }
     }
     rs();
     addEventListener('resize', rs);
@@ -2359,7 +2405,7 @@ footer small {
   setTimeout(function() {
     var e = document.querySelector('.hero .ey');
     if (!rm && e) scr(e);
-  }, 1000);
+  }, 400);
 
   /* GSAP Animations & ScrollTriggers */
   if (window.gsap && window.ScrollTrigger && !rm) {
@@ -2387,27 +2433,70 @@ footer small {
     // Hero CTA Immediate Snappy Reveal (No long lag!)
     gsap.from('.ctas .btn', { scale: 0.95, opacity: 0, duration: 0.35, ease: 'power2.out', stagger: 0.06, delay: 0.08 });
 
-    // Batch Card Reveals on Scroll (.rv)
-    ScrollTrigger.batch('.rv', {
-      start: 'top 88%',
-      onEnter: function(b) {
-        b.forEach(function(el, i) {
-          var d = el.closest('.prob') ? { x: -60 } : el.closest('.dark') ? { rotationX: -50, transformPerspective: 800, y: 35 } : { y: 35 };
-          gsap.fromTo(el, Object.assign({ opacity: 0 }, d), { opacity: 1, x: 0, y: 0, rotationX: 0, duration: 0.8, delay: i * 0.08, ease: 'power3.out' });
-        });
-      },
-      once: true
+    // High-Performance Smooth Reveal for Cards & Sections (.rv)
+    document.querySelectorAll('.rv').forEach(function(el, i) {
+      var d = el.closest('.prob') ? { x: -35 } : el.closest('.dark') ? { rotationX: -25, transformPerspective: 800, y: 25 } : { y: 25 };
+      gsap.fromTo(el, 
+        Object.assign({ opacity: 0.15 }, d),
+        {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          rotationX: 0,
+          duration: 0.65,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 93%',
+            once: true
+          }
+        }
+      );
     });
-    gsap.set('.rv', { opacity: 0 });
 
-    // Section headings clip-path slide in
+    // Fallback: Ensure 100% of cards are visible under any network/scroll circumstance
+    setTimeout(function() {
+      document.querySelectorAll('.rv').forEach(function(el) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    }, 1200);
+
+    // Section headings slide in
     document.querySelectorAll('section:not(.hero) h2').forEach(function(h) {
-      gsap.from(h, {
-        y: 40,
-        opacity: 0,
-        duration: 0.85,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: h, start: 'top 88%' }
+      gsap.fromTo(h,
+        { y: 30, opacity: 0.2 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: h, start: 'top 92%', once: true }
+        }
+      );
+    });
+
+    // Automatic Cipher Text Scramble on Scroll for Section & Card Headings (Mobile + Desktop)
+    if ('IntersectionObserver' in window) {
+      var scrambleObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !entry.target._scrambled) {
+            entry.target._scrambled = true;
+            scr(entry.target);
+          }
+        });
+      }, { threshold: 0.25, rootMargin: '0px 0px -5% 0px' });
+
+      document.querySelectorAll('section:not(.hero) h2, .card h3, .work-body h4').forEach(function(el) {
+        scrambleObserver.observe(el);
+      });
+    }
+
+    // Tap/Click on cards decodes and scrambles their heading (Great for mobile!)
+    document.querySelectorAll('.card, .work-card, .price-card').forEach(function(c) {
+      c.addEventListener('click', function() {
+        var h = c.querySelector('h3, h4');
+        if (h) scr(h);
       });
     });
 
